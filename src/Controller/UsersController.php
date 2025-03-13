@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Users;
+use Symfony\Component\HttpFoundation\Response;
+
 
 final class UsersController extends AbstractController
 {
@@ -35,5 +38,26 @@ final class UsersController extends AbstractController
         $entityManager->flush();
 
         return new Response('Saved new user with id '.$user->getId());
+    }
+
+    #[Route('/users/{id}', name: 'show_user')]
+    public function showUser(EntityManagerInterface $entityManager, int $id): JsonResponse
+    {
+        $user = $entityManager->getRepository(Users::class)->find($id);
+        
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'No user found for id '.$id
+            );
+        }
+
+        return $this->json([
+            'id' => $user->getId(),
+            'mail' => $user->getMail(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'isAdmin' => $user->isAdmin(),
+            'username' => $user->getUsername(),
+        ]);
     }
 }
