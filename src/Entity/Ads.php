@@ -6,8 +6,9 @@ use App\Repository\AdsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\StatusEnum;
 
+
 #[ORM\Entity(repositoryClass: AdsRepository::class)]
-class Ads
+class Ads 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

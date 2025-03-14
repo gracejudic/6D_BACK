@@ -10,7 +10,7 @@ use App\Entity\Ads;
 use App\Entity\Products;
 use Symfony\Component\HttpFoundation\Response;
 use App\Enum\StatusEnum;
-
+use ArrayObject;
 
 final class AdsController extends AbstractController
 {   
@@ -25,7 +25,63 @@ final class AdsController extends AbstractController
         ]);
     }
 
-    #[Route('/ads/add-dummy-data', name: 'ads_add_dummy_data')]
+    #[Route('/ads/showAd/{id}', name: 'add_show')]
+    public function showAd(EntityManagerInterface $entityManager, int $id): JSONResponse
+    {
+        $ad = $entityManager->getRepository(Ads::class)->find($id);
+
+        if (!$ad) {
+            throw $this->createNotFoundException(
+                'No product found for id '.$id
+            );
+        }
+
+        $product_id = $ad->getProductId();
+        $product = $entityManager->getRepository(Products::class)->find($product_id);
+
+        return $this->json([
+            'ad' => $ad->getTitle(),
+            'created_at' => $ad->getCreatedAt(),
+            'product_name' =>  $product->getName(),
+            'description' => $product->getDescription(),
+            // rajouter des infos
+        ]);
+    }
+
+
+    // ne marche pas.....
+    #[Route('/ads/showAd/', name: 'add_show_all')]
+    public function showAllAd(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $ads = $entityManager->getRepository(Ads::class)->findAll();
+
+        if (!$ads) {
+            throw $this->createNotFoundException(
+                'No product found'
+            );
+        }
+
+        $product = $entityManager->getRepository(Products::class)->findAll();
+
+        $arrayCollection = array();
+
+        foreach($ads as $item) {
+            $arrayCollection[] = array(
+                'id' => $item->getId(),
+                'title' => $item->getTitle(),
+                'created_at' => $product->getCreatedAt(),
+                'product_name' =>  $product->getName(),
+                'description' => $product->getDescription()
+            );
+        }
+
+        return new JsonResponse($arrayCollection);
+
+    }
+
+
+
+    #[Route('/ads/add-dummy-data', name:"add-data")]
     public function addDummyData(EntityManagerInterface $entityManager): Response
     {
         $titleArray = ['Canapé Le Bambole en velours moutarde par Mario Bellini pour B&B Italia, 1970',

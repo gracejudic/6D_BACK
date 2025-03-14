@@ -22,7 +22,7 @@ final class PicturesController extends AbstractController
         ]);
     }
 
-    #[Route('/pictures/add-dummy-pictures', name: 'pictures_add_dummy_pictures')]
+    #[Route('/pictures/add-dummy-pictures', methods:['POST'])]
     public function addDummyPictures(EntityManagerInterface $entityManager): Response
     {
         $products = $entityManager->getRepository(Products::class)->findAll();

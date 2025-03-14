@@ -21,7 +21,7 @@ final class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/users/add-user', name: 'add_user')]
+    #[Route('/users/add-user', methods: ['POST'])]
     public function addUser(EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
@@ -40,7 +40,7 @@ final class UsersController extends AbstractController
         return new Response('Saved new user with id '.$user->getId());
     }
 
-    #[Route('/users/{id}', name: 'show_user')]
+    #[Route('/users/{id}', methods: ['GET'])]
     public function showUser(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $user = $entityManager->getRepository(Users::class)->find($id);
