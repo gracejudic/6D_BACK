@@ -21,7 +21,7 @@ final class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/users/add-user', methods: ['POST'])]
+    #[Route('/users/add-user')]
     public function addUser(EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
