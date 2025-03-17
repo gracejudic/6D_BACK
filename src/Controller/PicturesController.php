@@ -22,7 +22,7 @@ final class PicturesController extends AbstractController
         ]);
     }
 
-    #[Route('/pictures/add-dummy-pictures', methods:['POST'])]
+    #[Route('/pictures/add-dummy-pictures')]
     public function addDummyPictures(EntityManagerInterface $entityManager): Response
     {
         $products = $entityManager->getRepository(Products::class)->findAll();
@@ -77,7 +77,7 @@ final class PicturesController extends AbstractController
             for ($j=0; $j < sizeof($pictureUrls[$i]); $j++) {
                 $picture = new Pictures(); 
                 $picture->setUrl('..\pictures\\' . $pictureUrls[$i][$j]);
-                $picture->setProductId($i+3);
+                $picture->setProductId($i+1);
                 $entityManager->persist($picture);
             }
         }
