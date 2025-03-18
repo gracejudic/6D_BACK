@@ -30,6 +30,7 @@ final class ProductsController extends AbstractController
                 'color' => $product -> getColor(),
                 'product_condition' => $product -> getProductCondition(),
                 'price' => $product -> getPrice(),
+                
             ];
         }
 
