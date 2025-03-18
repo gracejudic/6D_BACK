@@ -29,6 +29,7 @@ final class AdsController extends AbstractController
                 'id' => $ad->getId(),
                 'title' => $ad->getTitle(),
                 'created_at' => $ad->getCreatedAt(),
+                'status' => $ad->getStatus(),
 
                 // Ajoutez d'autres champs selon vos besoins
             ];
