@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\ProductEnum;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -32,8 +33,8 @@ class Products
     #[ORM\Column(length: 255)]
     private ?string $color = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $product_condition = null;
+    #[ORM\Column]
+    private ?ProductEnum $product_condition = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
@@ -122,12 +123,12 @@ class Products
         return $this;
     }
 
-    public function getProductCondition(): ?string
+    public function getProductCondition(): ?ProductEnum
     {
         return $this->product_condition;
     }
 
-    public function setProductCondition(string $product_condition): static
+    public function setProductCondition(ProductEnum $product_condition): static
     {
         $this->product_condition = $product_condition;
 
