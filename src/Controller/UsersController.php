@@ -15,6 +15,10 @@ final class UsersController extends AbstractController
     #[Route('/users', name: 'app_users')]
     public function index(): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/UsersController.php',
@@ -24,6 +28,10 @@ final class UsersController extends AbstractController
     #[Route('/users/add-user')]
     public function addUser(EntityManagerInterface $entityManager): Response
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $user = new Users();
 
         $user->setMail('bonjour@mail.com');
@@ -43,6 +51,10 @@ final class UsersController extends AbstractController
     #[Route('/users/{id}', methods: ['GET'])]
     public function showUser(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $user = $entityManager->getRepository(Users::class)->find($id);
         
         if (!$user) {

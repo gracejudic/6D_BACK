@@ -19,6 +19,10 @@ final class AdsController extends AbstractController
     #[Route('/ads', name: 'app_ads', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         // Récupérer les annonces depuis la base de données
         $ads = $entityManager->getRepository(Ads::class)->findAll();
 
@@ -42,6 +46,10 @@ final class AdsController extends AbstractController
     #[Route('/ads/showAd/{id}', name: 'add_show', methods: ['GET'])]
     public function showAd(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $ad = $entityManager->getRepository(Ads::class)->find($id);
 
         if (!$ad) {
@@ -68,6 +76,10 @@ final class AdsController extends AbstractController
     #[Route('/ads/add-dummy-data', name:"add-data")]
     public function addDummyData(EntityManagerInterface $entityManager): Response
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $titleArray = ['Canapé Le Bambole en velours moutarde par Mario Bellini pour B&B Italia, 1970',
         'Série de 4 chaises en pin, années 70',
         'Serie de 3 chaises bistrot 1950',

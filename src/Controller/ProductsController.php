@@ -14,6 +14,10 @@ final class ProductsController extends AbstractController
     #[Route('/products', name: 'app_products', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         // Récupérer les produits depuis la base de données
         $products = $entityManager->getRepository(Products::class)->findAll();
 
@@ -30,6 +34,7 @@ final class ProductsController extends AbstractController
                 'color' => $product -> getColor(),
                 'product_condition' => $product -> getProductCondition(),
                 'price' => $product -> getPrice(),
+                
             ];
         }
 
@@ -38,6 +43,10 @@ final class ProductsController extends AbstractController
     #[Route('/products/{id}', name: 'product_show', methods: ['GET'])]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $product = $entityManager->getRepository(Products::class)->find($id);
 
         if (!$product) {
