@@ -9,9 +9,47 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Pictures;
 use App\Entity\Products;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\PicturesRepository;
 
 final class PicturesController extends AbstractController
 {
+    #[Route('/pictures/first/{productId}', name: 'app_pictures_first', methods: ['GET'])]
+public function getFirstPicture(int $productId, PicturesRepository $picturesRepository): JsonResponse
+{
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+
+
+    $picture = $picturesRepository->findOneBy(['product_id' => $productId]);
+
+    if (!$picture) {
+        return $this->json(['error' => 'No picture found'], Response::HTTP_NOT_FOUND);
+    }
+
+    return $this->json(['url' => $picture->getUrl()]);
+}
+
+
+    #[Route('/pictures/all/{productId}', name: 'app_pictures_all', methods: ['GET'])]
+    public function getAllPictures(int $productId, PicturesRepository $picturesRepository): JsonResponse
+    {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
+        $pictures = $picturesRepository->findBy(['product_id' => $productId]);
+    
+        if (!$pictures) {
+            return $this->json(['error' => 'No pictures found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        $urls = array_map(fn($pic) => $pic->getUrl(), $pictures);
+    
+        return $this->json(['urls' => $urls]);
+    }
+
+
 
     #[Route('/pictures', name: 'app_pictures')]
     public function index(): JsonResponse
