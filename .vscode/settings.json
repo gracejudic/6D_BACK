@@ -1,0 +1,11 @@
+{
+    "git.openRepositoryInParentFolders": "never",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.CustomBrowser": "firefox",
+    "workbench.iconTheme": "material-icon-theme",
+    "java.test.config": {
+    },
+    "gradle.allowParallelRun": true,
+    "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.4.1/bin/php",
+    "workbench.settings.openDefaultSettings": true
+}
