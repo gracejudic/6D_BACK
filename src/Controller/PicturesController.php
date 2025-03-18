@@ -16,6 +16,10 @@ final class PicturesController extends AbstractController
     #[Route('/pictures', name: 'app_pictures')]
     public function index(): JsonResponse
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/PicturesController.php',
@@ -25,6 +29,10 @@ final class PicturesController extends AbstractController
     #[Route('/pictures/add-dummy-pictures')]
     public function addDummyPictures(EntityManagerInterface $entityManager): Response
     {
+        header("Access-Control-Allow-Origin: http://localhost:5173");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
         $products = $entityManager->getRepository(Products::class)->findAll();
         
         $pictureUrls = [
