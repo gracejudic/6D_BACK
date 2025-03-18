@@ -35,4 +35,27 @@ final class ProductsController extends AbstractController
 
         return $this->json($productsData);
     }
+    #[Route('/products/{id}', name: 'product_show', methods: ['GET'])]
+    public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
+    {
+        $product = $entityManager->getRepository(Products::class)->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException('No product found for id ' . $id);
+        }
+
+        $productData = [
+            'id' => $product->getId(),
+            'name' => $product->getName(),
+            'description' => $product->getDescription(),
+            'type' => $product->getType(),
+            'dimensions' => $product->getDimensions(),
+            'material' => $product->getMaterial(),
+            'color' => $product->getColor(),
+            'product_condition' => $product->getProductCondition()->value, // Utilisez ->value pour l'enum
+            'price' => $product->getPrice(),
+        ];
+
+        return $this->json($productData);
+    }
 }
