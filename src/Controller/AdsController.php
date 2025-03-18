@@ -16,13 +16,26 @@ final class AdsController extends AbstractController
 {   
     private int $NUMBEROFADS = 6;
 
-    #[Route('/ads', name: 'app_ads')]
-    public function index(): JsonResponse
+    #[Route('/ads', name: 'app_ads', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AdsController.php',
-        ]);
+        // Récupérer les annonces depuis la base de données
+        $ads = $entityManager->getRepository(Ads::class)->findAll();
+
+        // Préparer les données pour la réponse JSON
+        $adsData = [];
+        foreach ($ads as $ad) {
+            $adsData[] = [
+                'id' => $ad->getId(),
+                'title' => $ad->getTitle(),
+                'created_at' => $ad->getCreatedAt(),
+
+                // Ajoutez d'autres champs selon vos besoins
+            ];
+        }
+
+        // Retourner les données sous forme de JSON
+        return $this->json($adsData);
     }
 
     #[Route('/ads/showAd/{id}', name: 'add_show')]
