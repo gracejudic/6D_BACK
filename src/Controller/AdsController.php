@@ -16,70 +16,54 @@ final class AdsController extends AbstractController
 {   
     private int $NUMBEROFADS = 6;
 
-    #[Route('/ads', name: 'app_ads')]
-    public function index(): JsonResponse
+    #[Route('/ads', name: 'app_ads', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AdsController.php',
-        ]);
+        // Récupérer les annonces depuis la base de données
+        $ads = $entityManager->getRepository(Ads::class)->findAll();
+
+        // Préparer les données pour la réponse JSON
+        $adsData = [];
+        foreach ($ads as $ad) {
+            $adsData[] = [
+                'id' => $ad->getId(),
+                'title' => $ad->getTitle(),
+                'created_at' => $ad->getCreatedAt(),
+                'status' => $ad->getStatus()->value,
+
+                // Ajoutez d'autres champs selon vos besoins
+            ];
+        }
+
+        // Retourner les données sous forme de JSON
+        return $this->json($adsData);
     }
 
-    #[Route('/ads/showAd/{id}', name: 'add_show')]
-    public function showAd(EntityManagerInterface $entityManager, int $id): JSONResponse
+    #[Route('/ads/showAd/{id}', name: 'add_show', methods: ['GET'])]
+    public function showAd(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $ad = $entityManager->getRepository(Ads::class)->find($id);
 
         if (!$ad) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+            throw $this->createNotFoundException('No ad found for id ' . $id);
         }
 
-        $product_id = $ad->getProductId();
-        $product = $entityManager->getRepository(Products::class)->find($product_id);
+        $product = $entityManager->getRepository(Products::class)->find($ad->getProductId());
+
+        if (!$product) {
+            throw $this->createNotFoundException('No product found for ad id ' . $id);
+        }
 
         return $this->json([
-            'ad' => $ad->getTitle(),
+            'id' => $ad->getId(),
+            'title' => $ad->getTitle(),
             'created_at' => $ad->getCreatedAt(),
-            'product_name' =>  $product->getName(),
+            'status' => $ad->getStatus()->value,
+            'product_name' => $product->getName(),
             'description' => $product->getDescription(),
-            // rajouter des infos
+            // Ajoutez d'autres informations si nécessaire
         ]);
     }
-
-
-    // ne marche pas.....
-    #[Route('/ads/showAd/', name: 'add_show_all')]
-    public function showAllAd(EntityManagerInterface $entityManager): JsonResponse
-    {
-        $ads = $entityManager->getRepository(Ads::class)->findAll();
-
-        if (!$ads) {
-            throw $this->createNotFoundException(
-                'No product found'
-            );
-        }
-
-        $product = $entityManager->getRepository(Products::class)->findAll();
-
-        $arrayCollection = array();
-
-        foreach($ads as $item) {
-            $arrayCollection[] = array(
-                'id' => $item->getId(),
-                'title' => $item->getTitle(),
-                'created_at' => $product->getCreatedAt(),
-                'product_name' =>  $product->getName(),
-                'description' => $product->getDescription()
-            );
-        }
-
-        return new JsonResponse($arrayCollection);
-
-    }
-
-
 
     #[Route('/ads/add-dummy-data', name:"add-data")]
     public function addDummyData(EntityManagerInterface $entityManager): Response
